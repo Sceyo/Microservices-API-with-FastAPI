@@ -88,6 +88,7 @@ Sample JSON:
   "description": "This is a sample product."
 }
 
+
 # GET /products/{product_id}
 
 Set URL: http://127.0.0.1:3004/products/{product_id}
@@ -97,6 +98,7 @@ Method: GET
   Customer Service:
   
   POST /customers
+
 
 # Set URL: http://127.0.0.1:3005/customers
 Method: POST
@@ -108,6 +110,7 @@ Sample JSON
   "email": "johndoe@example.com"
 }
 
+
 # GET /customers/{customer_id}
 
 Set URL: http://127.0.0.1:3005/customers/{customer_id}
@@ -115,6 +118,7 @@ Method: GET
 
 
 Order Service: 
+
 
 # POST /orders
 
@@ -128,6 +132,7 @@ Sample JSON:
   "product_id": 1,
   "quantity": 2
 }
+
 
 # GET /orders/{order_id}
 
