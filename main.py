@@ -1,4 +1,4 @@
-# app/main.py
+
 
 from fastapi import FastAPI
 from Routers import products
