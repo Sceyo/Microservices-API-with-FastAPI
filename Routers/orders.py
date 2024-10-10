@@ -9,7 +9,6 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Create the FastAPI app and the router
 app = FastAPI()
 router = APIRouter()
 

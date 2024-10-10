@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from passlib.context import CryptContext
 import logging
 
-
 fake_users_db = {
     "admin_user": {
         "username": "admin_user",

@@ -37,6 +37,8 @@ async def create_customer(customer: Customer, current_user: dict = Depends(get_c
 
 @router.get("/customers/{customer_id}") 
 async def get_customer(customer_id: int, current_user: dict = Depends(get_current_user_and_role)):
+    if current_user['role'] != 'admin' and current_user['username'] != customers[customer_id]['email']:
+        raise HTTPException(status_code=403, detail="Not enough privileges")
     if customer_id in customers:
         return customers[customer_id]
     else:
