@@ -143,6 +143,9 @@ Method: GET
 
 I’ve been exploring how FastAPI works recently, and I’m happy to report that I’ve achieved success in understanding it.
 
+# EXTRA
+pip install python-jose[cryptography] passlib[bcrypt] fastapi
+
 
 
 
