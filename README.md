@@ -61,13 +61,13 @@ Make sure you have Python 3.7 or later installed on your system.
 # Running the Services:
 
 # Start Product Service:
-  command: uvicorn product_service:app --reload --port 3004
+  command: uvicorn main:app --reload --port 3004
 
 # Start Customer Service:
-  command: uvicorn customer_service:app --reload --port 3005
+  command: uvicorn main:app --reload --port 3005
 
 # Start Order Service:
-  command: uvicorn orderservice:app --reload --port 3006
+  command: uvicorn main:app --reload --port 3006
 
 
 # Testing the API with Postman
