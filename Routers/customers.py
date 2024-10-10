@@ -21,28 +21,28 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # Get current user and check role
 async def get_current_user_and_role(token: str = Depends(oauth2_scheme)):
     user = await get_current_user(token)
-    return user  # This user object should include the 'role' attribute
+    return user  
 
 # Customer Management Endpoints
-@app.post("/customers", status_code=201)
+@router.post("/customers", status_code=201) 
 async def create_customer(customer: Customer, current_user: dict = Depends(get_current_user_and_role)):
     if current_user['role'] != 'admin':
         raise HTTPException(status_code=403, detail="Not enough privileges")
-    
+
     global next_customer_id
     customer_id = next_customer_id
     customers[customer_id] = customer.dict()
     next_customer_id += 1
     return {"customer_id": customer_id}
 
-@app.get("/customers/{customer_id}")
+@router.get("/customers/{customer_id}") 
 async def get_customer(customer_id: int, current_user: dict = Depends(get_current_user_and_role)):
     if customer_id in customers:
         return customers[customer_id]
     else:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-@app.put("/customers/{customer_id}")
+@router.put("/customers/{customer_id}")  
 async def update_customer(customer_id: int, customer: Customer, current_user: dict = Depends(get_current_user_and_role)):
     if current_user['role'] != 'admin' and current_user['username'] != customers[customer_id]['email']:
         raise HTTPException(status_code=403, detail="Not enough privileges")
@@ -53,7 +53,7 @@ async def update_customer(customer_id: int, customer: Customer, current_user: di
     else:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-@app.delete("/customers/{customer_id}", status_code=204)
+@router.delete("/customers/{customer_id}", status_code=204) 
 async def delete_customer(customer_id: int, current_user: dict = Depends(get_current_user_and_role)):
     if current_user['role'] != 'admin':
         raise HTTPException(status_code=403, detail="Not enough privileges")
@@ -64,5 +64,4 @@ async def delete_customer(customer_id: int, current_user: dict = Depends(get_cur
     else:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-# Include the router to the app
 app.include_router(router)

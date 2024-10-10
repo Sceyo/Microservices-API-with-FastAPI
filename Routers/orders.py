@@ -9,13 +9,13 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
+# Create the FastAPI app and the router
 app = FastAPI()
 router = APIRouter()
 
 # In-memory store for orders
 orders: Dict[int, Dict] = {}
 next_order_id = 1
-
 
 class Order(BaseModel):
     customer_id: int
@@ -31,7 +31,7 @@ async def get_current_user_and_role(token: str = Depends(oauth2_scheme)):
     return user
 
 # Create a new order (Customer only)
-@app.post("/orders", status_code=201)
+@router.post("/orders", status_code=201)
 async def create_order(order: Order, current_user: dict = Depends(get_current_user_and_role)):
     # Ensure the user is a customer
     if current_user['role'] != 'customer':
@@ -59,7 +59,7 @@ async def create_order(order: Order, current_user: dict = Depends(get_current_us
     return {"order_id": order_id}
 
 # Get an order by ID (Available to all users)
-@app.get("/orders/{order_id}")
+@router.get("/orders/{order_id}")
 async def get_order(order_id: int, current_user: dict = Depends(get_current_user_and_role)):
     if order_id in orders:
         logging.info(f"Order {order_id} retrieved successfully.")
@@ -69,7 +69,7 @@ async def get_order(order_id: int, current_user: dict = Depends(get_current_user
         raise HTTPException(status_code=404, detail="Order not found")
 
 # Update an order (Admin only)
-@app.put("/orders/{order_id}")
+@router.put("/orders/{order_id}")
 async def update_order(order_id: int, order: Order, current_user: dict = Depends(get_current_user_and_role)):
     # Ensure the user is an admin
     if current_user['role'] != 'admin':
@@ -85,7 +85,7 @@ async def update_order(order_id: int, order: Order, current_user: dict = Depends
         raise HTTPException(status_code=404, detail="Order not found")
 
 # Delete an order (Admin only)
-@app.delete("/orders/{order_id}", status_code=204)
+@router.delete("/orders/{order_id}", status_code=204)
 async def delete_order(order_id: int, current_user: dict = Depends(get_current_user_and_role)):
     # Ensure the user is an admin
     if current_user['role'] != 'admin':

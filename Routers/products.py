@@ -29,17 +29,22 @@ async def get_current_user_and_role(token: str = Depends(oauth2_scheme)):
     return user 
 
 # Create a new product (Admin only)
-@app.post("/products", status_code=201)
+@router.post("/products", status_code=201)
 async def create_product(product: Product, current_user: dict = Depends(get_current_user_and_role)):
+    logging.info(f"Current user: {current_user}")
+    
     if current_user['role'] != 'admin':
         logging.warning(f"Unauthorized access attempt by {current_user['username']} to create a product.")
         raise HTTPException(status_code=403, detail="Not enough privileges")
+    
+    logging.info(f"User {current_user['username']} has admin privileges. Proceeding with product creation.")
     
     global next_product_id
     product_id = next_product_id
     products[product_id] = product.dict()
     next_product_id += 1
     logging.info(f"Product created with ID: {product_id} by admin: {current_user['username']}")
+    
     return {"product_id": product_id}
 
 # Get a product by ID (Available to all)
